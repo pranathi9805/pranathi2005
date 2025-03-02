@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #da7676, #333130);
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 300px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 50px;
+            border: 2px solid #000;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        input, button {
+            width: 90%;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #000;
+            border-radius: 5px;
+        }
+        button {
+            background: #c21717;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Login</h2>
+    <div class="container">
+        <input type="text" id="username" placeholder="Full Name">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="verifyLogin()">Login</button>
+    </div>
+    <script>
+        function verifyLogin() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let storedData = localStorage.getItem("excelData");
+
+            let parsedData = JSON.parse(storedData);
+            let userFound = parsedData.some(row => row[0] === username && row[6] === password);
+
+            if (userFound) {
+                alert("Login Successful!");
+                window.location.href = "index.html";
+            } else {
+                alert("Invalid Credentials!");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            background-color: #eccfb1;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            width: 320px;
+            margin: auto;
+            background: #e6cdcd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 50px;
+            border: 2px solid #0f0f0f;
+        }
+        input, button {
+            width: 90%;
+            margin: 10px;
+            padding: 10px;
+            border: 2px solid #1b1a1a;
+            border-radius: 5px;
+        }
+        button {
+            background: #c7c9be;
+            color: rgb(229, 238, 238);
+            border: 2px solid #1a1818;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #160f0a;
+        }
+    </style>
+</head>
+<body>
+    <h2>Register</h2>
+    <div class="container">
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="date" id="dob">
+        <input type="text" id="mobile" placeholder="Mobile Number">
+        <input type="email" id="email" placeholder="Email">
+        <input type="text" id="department" placeholder="Department">
+        <input type="text" id="year" placeholder="Year">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirm_password" placeholder="Confirm Password">
+        <button onclick="register()">Register</button>
+        <br><br>
+        <button onclick="downloadExcel()">Download Excel</button>
+    </div>
+
+    <script>
+        function register() {
+            let name = document.getElementById("name").value;
+            let dob = document.getElementById("dob").value;
+            let mobile = document.getElementById("mobile").value;
+            let email = document.getElementById("email").value;
+            let department = document.getElementById("department").value;
+            let year = document.getElementById("year").value;
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirm_password").value;
+
+            if (!name || !dob || !mobile || !email || !department || !year || !password || !confirmPassword) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return;
+            }
+
+            let newUser = [name, dob, mobile, email, department, year, password];
+
+            let storedData = localStorage.getItem("excelData");
+            let parsedData = storedData ? JSON.parse(storedData) : [];
+
+            parsedData.push(newUser);
+            localStorage.setItem("excelData", JSON.stringify(parsedData));
+
+            alert("Registration successful!");
+            window.location.href = "login.html"; 
+        }
+
+        function downloadExcel() {
+            let storedData = localStorage.getItem("excelData");
+
+            if (!storedData) {
+                alert("No data found!");
+                return;
+            }
+
+            let parsedData = JSON.parse(storedData);
+            let csvContent = "Full Name,DOB,Mobile,Email,Department,Year,Password\n";
+
+            parsedData.forEach(row => {
+                csvContent += row.join(",") + "\n";
+            });
+
+            let blob = new Blob([csvContent], { type: "text/csv" });
+            let a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "UserData.csv";
+            a.click();
+        }
+    </script>
+</body>
+</html>
